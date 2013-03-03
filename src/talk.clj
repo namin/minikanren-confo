@@ -58,8 +58,8 @@
   (eg
     (run* [q]
       (nom/fresh [a]
-        (== `(3 ~a ~true) q)
-        (nom/hash a q)))
+        (nom/hash a q)
+        (== `(3 ~a ~true) q)))
     ==> '())
   (eg
     (run* [q]
