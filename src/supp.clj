@@ -25,3 +25,8 @@
     (run* [q] (symbolo q))
     ==> '((_0 :- (sym _0))))
 )
+
+;;; lambda calculus
+
+(defn lam [x e] `(~'fn ~(nom/tie x e)))
+(defn app [e1 e2] `(~e1 ~e2))

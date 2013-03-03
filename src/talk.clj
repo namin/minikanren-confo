@@ -6,6 +6,49 @@
         [clojure.core.logic.nominal :exclude [fresh hash] :as nom])
   (:use [clojure.test]))
 
+;;; reasoning about scope
+
+(about "alpha-equivalence"
+  (eg
+    (run* [q]
+      (nom/fresh [a b]
+        (== (lam a a) (lam b b))))
+    ==> '(_0))
+  (eg
+    (run* [q]
+      (nom/fresh [a b]
+        (== (lam a (lam b a)) (lam b (lam a b)))))
+    ==> '(_0))
+  (eg
+    (run* [q]
+      (nom/fresh [a b]
+        (== (lam a (lam b a)) (lam a (lam b b)))))
+    ==> '())
+  (eg
+    (run* [q]
+      (nom/fresh [a b]
+        (== (lam a b) (lam b a))))
+    ==> '())
+  (eg
+    (run* [q]
+      (nom/fresh [a b c]
+        (== (lam a c) (lam b c))))
+    ==> '(_0))
+)
+
+(about "freshness-constraints"
+  (eg
+    (run* [q]
+      (nom/fresh [a]
+        (nom/hash a (lam a a))))
+    ==> '(_0))
+  (eg
+    (run* [q]
+      (nom/fresh [a b]
+        (nom/hash a (lam b a))))
+    ==> '())
+)
+
 ;;; language intro: fresh, hash, tie
 
 (about "fresh"
