@@ -39,7 +39,22 @@
         (== (lam a c) (lam b c))))
     ==> '(_0)))
 
+;;; formally,
+;;; `λa.e ≡α λb.[b/a]e` where `b` does not occur free in `e`
+
 (about "freshness-constraints"
+  (eg
+    (run* [q]
+      (nom/fresh [a]
+        (nom/hash a a)))
+    ==> '())
+
+  (eg
+    (run* [q]
+      (nom/fresh [a b]
+        (nom/hash a b)))
+    ==> '(_0))
+
   (eg
     (run* [q]
       (nom/fresh [a]
