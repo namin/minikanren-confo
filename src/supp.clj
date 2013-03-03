@@ -35,3 +35,19 @@
 (defn app [e1 e2] `(~e1 ~e2))
 (defn lamo [x e out] (== out (lam x e)))
 (defn appo [e1 e2 out] (all (== out (app e1 e2)) (!= e1 'fn)))
+
+;;; environments
+(defn env [names bindings] ['env names bindings])
+(defn envo [names bindings out] (== out (env names bindings)))
+(def empty-env (env '() '()))
+(defn env-pluso [x v ein eout]
+  (fresh [names-in bindings-in names-out bindings-out]
+    (envo names-in bindings-in ein)
+    (envo names-out bindings-out eout)
+    (nom/hash x names-in)
+    (conso x names-in names-out)
+    (conso [x v] bindings-in bindings-out)))
+(defn env-ino [x v e]
+  (fresh [names bindings]
+    (envo names bindings e)
+    (membero [x v] bindings)))
