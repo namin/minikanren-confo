@@ -51,7 +51,7 @@
 
 ;;; example: capture-avoiding substitution
 
-(defn substo [e new a out]
+(defn substo [e new a out] ;; out == [new/a]e
   (conde
     [(nomo e) (== e a) (== new out)]
     [(nomo e) (!= e a) (== e out)]
@@ -64,8 +64,8 @@
        (nom/fresh [c]
          (lamo c e0 e)
          (lamo c o0 out)
-         (nom/hash c a)
-         (nom/hash c new)
+         (nom/hash c a) ;; [new/c]λc.e ≡α λc.e
+         (nom/hash c new) ;; [c/a]λc.a ≡α λa.c ≢α λc.c
          (substo e0 new a o0)))]))
 
 (about "substo"
