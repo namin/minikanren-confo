@@ -29,8 +29,6 @@ variables, common in logic programs.
 
 ## Example: capture-avoiding substitution
 
-TODO
-
 ## The three constructs of `core.logic.nominal`
 
 core.logic.nominal extends core.logic with three constructs for nominal
@@ -56,8 +54,6 @@ The operator `nom/hash` introduces a _freshness constraint_, asserting
 that a nom does not occur _free_ in a term.
 
 ## Example: type inferencer
-
-TODO
 
 ## Under the hood: swapping!
 
