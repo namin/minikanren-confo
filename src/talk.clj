@@ -9,6 +9,10 @@
 ;;; reasoning about scope
 
 (about "alpha-equivalence"
+
+  ;;; (lam x e): λx.e
+  ;;; (== (lam x1 e1) (lam x2 e2))
+
   (eg
     (run* [q]
       (nom/fresh [a b]
@@ -43,6 +47,9 @@
 ;;; `λa.e ≡α λb.[b/a]e` where `b` does not occur free in `e`
 
 (about "freshness-constraints"
+
+  ;;; (nom/hash x e): x#e
+
   (eg
     (run* [q]
       (nom/fresh [a]
