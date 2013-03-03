@@ -100,7 +100,8 @@
           (substo
             (lam a b) a b s)
           (== s (lam a a)))))
-    ==> '()))
+    ==> '())
+)
 
 ;;; language intro: fresh, hash, tie
 
