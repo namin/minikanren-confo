@@ -186,3 +186,56 @@
     ==> '(([[_0 _1] a_2] :- a_2#_1 a_2#_0)))
 )
 
+;;; example: small-step operational semantics
+
+(defn valo [e]
+  (fresh [e0]
+    (nom/fresh [x]
+      (lamo x e0 e))))
+
+(defn stepo [e o]
+  (conde
+    [(fresh [e1 e2 o1]
+       (appo e1 e2 e)
+       (appo o1 e2 o)
+       (stepo e1 o1))]
+    [(fresh [e1 e2 o2]
+       (appo e1 e2 e)
+       (appo e1 o2 o)
+       (valo e1)
+       (stepo e2 o2))]
+    [(fresh [e1 e2 e0]
+       (nom/fresh [x]
+         (appo e1 e2 e)
+         (valo e1)
+         (valo e2)
+         (lamo x e0 e1)
+         (nom/hash x e2)
+         (substo e0 e2 x o)))]))
+
+(defn stepo* [e o]
+  (conde
+    [(valo e) (== e o)]
+    [(fresh [i]
+       (stepo e i)
+       (stepo* i o))]))
+
+(about "operational-semantics"
+  (eg
+    (to-clj
+      (run* [q]
+        (nom/fresh [a]
+          (stepo (app (lam a a) (lam a a)) q))))
+    ==> '((fn [a_0] a_0)))
+  (eg
+    (to-clj
+      (run 3 [q]
+        (nom/fresh [a b]
+          (stepo* q (lam a a)))))
+    ==>
+    '(
+       (fn [a_0] a_0)
+       ((fn [a_0] a_0) (fn [a_1] a_1))
+       (((fn [a_0] a_0) (fn [a_1] a_1)) (fn [a_2] a_2))
+     ))
+)

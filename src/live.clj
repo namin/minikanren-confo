@@ -14,3 +14,6 @@
   `(deftest ~(symbol (str 'tests-about- name))
      (println "..." ~name)
      ~@args))
+
+(defn to-clj [x]
+  (read-string (prn-str x)))
