@@ -22,3 +22,13 @@ The term constructor `nom/tie` binds a nom in a term.
 
 The operator `nom/hash` introduces a _freshness constraint_, asserting
 that a nom does not occur free in a term.
+
+## Some examples
+
+### Capture-Avoiding Substitution
+
+### Type Inferencer
+
+## Under the hood: swapping!
+
+## Run your research!
