@@ -1,9 +1,18 @@
 # Nominal Logic Programming
 
-Nominal logic programming extends logic programming with facilities to
-explicitly manage names and bindings, making it easier to write
-programs, such as type inferencers and interpreters, that must reason
-about scope.
+Nominal logic programming brings nominal abstract syntax to logic
+programming. Nominal abstract syntax is a technique for reasoning about
+scope and binding, which is fairly close to what is done "on paper".  On
+paper, one uses explicit names for bound variables, while assuming the
+choice of name is unimportant, as long as the binding structure is
+preserved.
+
+Nominal abstract syntax formalizes this paper intuition, making it
+easier to write programs, such as type inferencers and interpreters,
+that must reason about scope and binding. Furthermore, nominal logic
+programming maintains the intuitive reasoning about scope and binding of
+nominal abstract syntax, even in the presence of unbound logic
+variables.
 
 ## Reasoning about scope
 

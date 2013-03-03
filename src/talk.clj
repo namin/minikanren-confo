@@ -6,7 +6,7 @@
         [clojure.core.logic.nominal :exclude [fresh hash] :as nom])
   (:use [clojure.test]))
 
-;;; reasoning about scope
+;;; nominal abstract syntax
 
 (about "alpha-equivalence"
 
@@ -75,6 +75,9 @@
     ==> '()))
 
 ;;; example: capture-avoiding substitution
+;;; [e'/a]e
+;;; [c/b]λa.b ≡ λa.c ≡ λb.c ≢ λc.c
+;;; [a/b]λa.b ≡ [a/b]λc.b ≡ λc.a ≢ λa.a
 
 (defn substo [e new a out] ;; out == [new/a]e
   (conde
