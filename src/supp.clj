@@ -7,7 +7,10 @@
 
 ;;; prettier reification for single-variable constraints
 (defn reifier-for [tag x]
-  (fn [c v r a] `(~tag ~(walk* r (walk* a x)))))
+  (fn [c v r a]
+    (let [x (walk* r (walk* a x))]
+      (when (symbol? x)
+        `(~tag ~x)))))
 
 ;;; type constraints
 (defn nomo [x] (predc x nom? (reifier-for 'nom x)))
