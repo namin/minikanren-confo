@@ -49,6 +49,59 @@
     ==> '())
 )
 
+;;; example: capture-avoiding substitution
+
+(defn substo [e new a out]
+  (conde
+    [(nomo e) (== e a) (== new out)]
+    [(nomo e) (!= e a) (== e out)]
+    [(fresh [e1 e2 o1 o2]
+       (appo e1 e2 e)
+       (appo o1 o2 out)
+       (substo e1 new a o1)
+       (substo e2 new a o2))]
+    [(fresh [e0 o0]
+       (nom/fresh [c]
+         (lamo c e0 e)
+         (lamo c o0 out)
+         (nom/hash c a)
+         (nom/hash c new)
+         (substo e0 new a o0)))]))
+
+(about "substo"
+  (eg
+    (run* [q]
+      (fresh [s]
+        (nom/fresh [a b c]
+          (substo
+            (lam a (app a b)) b a s)
+          (== s (lam c (app c b))))))
+    ==> '(_0))
+  (eg
+    (run* [q]
+      (fresh [s]
+        (nom/fresh [a b c]
+          (substo
+            (lam a (app a b)) b a s)
+          (== s (lam b (app b b))))))
+    ==> '())
+  (eg
+    (run* [q]
+      (fresh [s]
+        (nom/fresh [a b c]
+          (substo
+            (lam a b) a b s)
+          (== s (lam c a)))))
+    ==> '(_0))
+  (eg
+    (run* [q]
+      (fresh [s]
+        (nom/fresh [a b c]
+          (substo
+            (lam a b) a b s)
+          (== s (lam a a)))))
+    ==> '()))
+
 ;;; language intro: fresh, hash, tie
 
 (about "fresh"
