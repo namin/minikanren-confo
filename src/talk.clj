@@ -287,13 +287,13 @@
     [(fresh [e0 tx t0 g0]
        (nom/fresh [x]
          (lamo x e0 e)
-         (== t [tx '-> t0])
+         (arro tx t0 t)
          (env-pluso x tx g g0)
          (tio g0 e0 t0)))]
     ;; App
     [(fresh [e1 e2 t1 t2]
        (appo e1 e2 e)
-       (== t1 [t2 '-> t])
+       (arro t2 t t1)
        (tio g e1 t1)
        (tio g e2 t2))]))
 
@@ -331,7 +331,7 @@
   (eg
     (to-clj
       (run 10 [q]
-        (tio empty-env q '[A -> A])))
+        (tio empty-env q (arr 'A 'A))))
     ==>
     '(
        (fn [a_0] a_0)

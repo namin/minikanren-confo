@@ -36,6 +36,11 @@
 (defn lamo [x e out] (== out (lam x e)))
 (defn appo [e1 e2 out] (all (== out (app e1 e2)) (!= e1 'fn)))
 
+;;; typed lambda calculus
+
+(defn arr [t1 t2] [t1 '-> t2])
+(defn arro [t1 t2 out] (== out (arr t1 t2)))
+
 ;;; environments
 (defn env [names bindings] ['env names bindings])
 (defn envo [names bindings out] (== out (env names bindings)))
