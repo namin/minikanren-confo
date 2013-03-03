@@ -10,7 +10,7 @@
 
 (about "alpha-equivalence"
 
-  ;;; (lam x e): λx.e, (fn [x] e)
+  ;;; (lam x e): λx.e or (fn [x] e)
   ;;; (== (lam x1 e1) (lam x2 e2))
 
   (eg
