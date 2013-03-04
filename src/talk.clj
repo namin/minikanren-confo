@@ -42,7 +42,7 @@
     ==> '(_0)))
 
 ;;; formally,
-;;; `λa.e ≡α λb.[b/a]e` where `b` does not occur free in `e`
+;;; `λa.e ≡α λb.(swap b a)e` where `b` does not occur free in `e`
 
 (about "freshness-constraints"
 
@@ -410,4 +410,13 @@
         (nom/fresh [a b]
           (== (nom/tie a x) (nom/tie b y))
           (== [a b x y] q))))
-    ==> '(([a_0 a_1 _2 _3] :- a_1#_2 (swap [a_0 a_1] _3 _2)))))
+    ==> '(([a_0 a_1 _2 _3] :- a_1#_2 (swap [a_0 a_1] _3 _2))))
+  (eg
+    (run* [q]
+      (fresh [x y]
+        (nom/fresh [a b]
+          (== (nom/tie a x) (nom/tie b y))
+          (== [a b x y] q)
+          (== x y))))
+    ==> '(([a_0 a_1 _2 _2] :- a_1#_2 a_0#_2 a_1#_2 a_0#_2 a_1#_2)))
+  )
