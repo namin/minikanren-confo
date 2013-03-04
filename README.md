@@ -79,10 +79,11 @@ that a nom does not occur _free_ in a term.
 
 ## Example: type inferencer
 
-## Under the hood: swapping!
-
-TODO
-
 ## Run your research!
 
-TODO
+### Example: type debugger
+
+### Example: generator of counterexamples to meta-theoretic properties
+
+## Under the hood: swapping!
+
