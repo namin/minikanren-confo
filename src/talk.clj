@@ -101,8 +101,8 @@
       (fresh [s]
         (nom/fresh [a b c]
           (substo
-            (lam a (app a b)) b a s)
-          (== s (lam c (app c b))))))
+            (lam a (app a b)) b a s)  ;; [b/a]λa.(a b)
+          (== s (lam c (app c b)))))) ;;   == λc.(c b)
     ==> '(_0))
 
   (eg
@@ -110,8 +110,8 @@
       (fresh [s]
         (nom/fresh [a b c]
           (substo
-            (lam a (app a b)) b a s)
-          (== s (lam b (app b b))))))
+            (lam a (app a b)) b a s)  ;; [b/a]λa.(a b)
+          (== s (lam b (app b b)))))) ;;   != λb.(b b)
     ==> '())
 
   (eg
@@ -119,8 +119,8 @@
       (fresh [s]
         (nom/fresh [a b c]
           (substo
-            (lam a b) a b s)
-          (== s (lam c a)))))
+            (lam a b) a b s)  ;; [a/b]λa.b
+          (== s (lam c a))))) ;;   == λc.a
     ==> '(_0))
 
   (eg
@@ -128,8 +128,8 @@
       (fresh [s]
         (nom/fresh [a b c]
           (substo
-            (lam a b) a b s)
-          (== s (lam a a)))))
+            (lam a b) a b s)  ;; [a/b] λa.b
+          (== s (lam a a))))) ;;    != λa.a
     ==> '()))
 
 ;;; language intro: fresh, hash, tie
