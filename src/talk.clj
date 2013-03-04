@@ -398,3 +398,16 @@
        ([[env _0 ([_1 _2] . _3)]       || _1 ==> _2] :- (nom _1))
        ([[env _0 (_1 [_2 _3] . _4)]    || _2 ==> _3] :- (nom _2))
        ([[env _0 (_1 _2 [_3 _4] . _5)] || _3 ==> _4] :- (nom _3)))))
+
+;;; Demo Interlude: Run you Research!
+
+;;; Under the hood: swapping
+
+(about "nominal-logic"
+  (eg
+    (run* [q]
+      (fresh [x y]
+        (nom/fresh [a b]
+          (== (nom/tie a x) (nom/tie b y))
+          (== [a b x y] q))))
+    ==> '(([a_0 a_1 _2 _3] :- a_1#_2 (swap [a_0 a_1] _3 _2)))))

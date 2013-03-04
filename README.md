@@ -87,3 +87,16 @@ that a nom does not occur _free_ in a term.
 
 ## Under the hood: swapping!
 
+Nominal unification is specified using nom-swaps and `#`-constraints.
+
+Two binders `t1` and `t2` unify when either:
+
+* `t1` is `[a] c1`, `t2` is `[a] c2` and `c1` unifies with `c2`, or
+* `t1` is `[a] c1`, `t2` is `[b] c2`, `a#c2`, and `c1` unifies with the term `c2` with all `a`s and `b`s swapped.
+
+Swapping introduces suspensions, because when we encounter a variable during swapping, we must delay the swap until the variable is bound.
+
+In core.logic.nominal, we implement suspensions as constraints. During swapping of `a` and `b`, whenever we encounter a variable `x`, we replace it with a fresh variable `x'` and add the suspension constraint swap `[a b] x' x`. This swap constraint is executed under one of two conditions:
+
+* `x` and `x'` both become bound -- the swapping can resume
+* `x` and `x'` become equal -- we enforce `a#x'` and `b#x'` and drop the swap constraint
