@@ -62,15 +62,15 @@
 
   (eg
     (run* [q]
-      (nom/fresh [a]
-        (nom/hash a (lam a a))))
-    ==> '(_0))
+      (nom/fresh [a b]
+        (nom/hash a (lam b a))))
+    ==> '())
 
   (eg
     (run* [q]
-      (nom/fresh [a b]
-        (nom/hash a (lam b a))))
-    ==> '()))
+      (nom/fresh [a]
+        (nom/hash a (lam a a))))
+    ==> '(_0)))
 
 ;;; example: capture-avoiding substitution
 ;;; [e'/a]e
@@ -128,8 +128,8 @@
       (fresh [s]
         (nom/fresh [a b c]
           (substo
-            (lam a b) a b s)  ;; [a/b] λa.b
-          (== s (lam a a))))) ;;    != λa.a
+            (lam a b) a b s)  ;; [a/b]λa.b
+          (== s (lam a a))))) ;;   != λa.a
     ==> '()))
 
 ;;; language intro: fresh, hash, tie
