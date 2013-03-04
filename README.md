@@ -1,3 +1,18 @@
+# Why?
+
+I implemented `core.logic.nominal` to integrate (1) relational, (2)
+constraint-based and (3) nominal techniques in one tool. Each of these
+techniques is independently useful for exploring semantics of
+programming languages and type systems. (1) If you implement your type
+system as a relational program, you get not only a type checker, but
+also a generator of well-typed terms, and possibly a type
+inferencer. (2) If you express the rules of your type system as
+constraints, and are able to monitor those constraints, then you can
+possibly turn your type checker into a type debugger. (3) Nominal
+abstract syntax simplfies reasoning about names and bindings so that you
+can use the same conventions in your implementation as on paper.
+
+
 # Nominal Logic Programming
 
 Nominal logic programming brings nominal abstract syntax to logic

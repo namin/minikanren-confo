@@ -6,8 +6,6 @@
         [clojure.core.logic.nominal :exclude [fresh hash] :as nom])
   (:use [clojure.test]))
 
-;;; nominal abstract syntax
-
 (about "alpha-equivalence"
 
   ;;; (lam x e): λx.e or (fn [x] e)
