@@ -6,6 +6,8 @@
         [clojure.core.logic.nominal :exclude [fresh hash] :as nom])
   (:use [clojure.test]))
 
+;;; core.logic.nominal
+
 (about "alpha-equivalence"
 
   ;;; (lam x e): λx.e or (fn [x] e)
@@ -32,7 +34,7 @@
   (eg
     (run* [q]
       (nom/fresh [a b]
-        (== (lam a b) (lam b a))))
+        (== (lam a b) (lam b b))))
     ==> '())
 
   (eg
@@ -42,7 +44,8 @@
     ==> '(_0)))
 
 ;;; formally,
-;;; `λa.e ≡α λb.(swap b a)e` where `b` does not occur free in `e`
+;;; `λa.e ≡α λb.(swap b a)e` where
+;;; `b` does not occur free in `e`
 
 (about "freshness-constraints"
 
