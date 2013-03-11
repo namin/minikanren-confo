@@ -135,6 +135,26 @@
           (== s (lam a a))))) ;;   != λa.a
     ==> '()))
 
+(about "substo-why-freshness-constraints"
+
+  (eg
+    (run* [q]
+      (fresh [e new]
+        (nom/fresh [a b c]
+          (substo (lam a e) new b (lam c c))
+          (!= (lam a e) (lam a a)))))
+    ==> '())
+    ;;; without ...#new, we would get success!
+
+  (eg
+    (run* [q]
+      (fresh [e new x]
+        (nom/fresh [a c]
+          (substo (lam a a) new x (lam c a)))))
+    ==> '())
+    ;;; without ...#a, we would get success!
+)
+
 ;;; language intro: fresh, hash, tie
 
 (about "fresh"
