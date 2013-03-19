@@ -33,8 +33,10 @@
 
 (defn lam [x e] `(~'fn ~(nom/tie x e)))
 (defn app [e1 e2] `(~e1 ~e2))
+(defn ife [c a b] `(~'if ~c ~a ~b))
 (defn lamo [x e out] (== out (lam x e)))
 (defn appo [e1 e2 out] (all (== out (app e1 e2)) (!= e1 'fn)))
+(defn ifo [c a b out] (== out (ife c a b)))
 
 ;;; typed lambda calculus
 

@@ -2,6 +2,7 @@
   (:use [live] :reload)
   (:use [supp] :reload)
   (:use [meta] :reload)
+  (:use [theory] :reload)
   (:refer-clojure :exclude [==])
   (:use [clojure.core.logic :exclude [is] :as l]
         [clojure.core.logic.nominal :exclude [fresh hash] :as nom])
@@ -437,7 +438,171 @@
 
 ;;; Demo Interlude: Run you Research!
 
-;;; Meta-Interpreters: Clauses
+;;; Finding Counterexamples to Meta-Theoretic Properties
+
+(defn gsubsto [e new a out] ;; out == [new/a]e
+  (conde
+    [(nomo e) (== e a) (== new out)]
+    [(nomo e) (!= e a) (== e out)]
+    [(symbolo e) (== e out)]
+    [(== true e) (== e out)]
+    [(== false e) (== e out)]
+    [(== e ()) (== e out)]
+    [(fresh [e0 es o0 os]
+       (conso e0 es e)
+       (conso o0 os out)
+       (gsubsto e0 new a o0)
+       (gsubsto es new a os))]
+    [(fresh [e0 o0]
+       (nom/fresh [c]
+         (== (nom/tie c e0) e)
+         (== (nom/tie c o0) out)
+         (nom/hash c a)
+         (nom/hash c new)
+         (gsubsto e0 new a o0)))]))
+
+(defn bvalo [e]
+  (conde
+    [(fresh [e0]
+       (nom/fresh [x]
+         (lamo x e0 e)))]
+    [(== e true)]
+    [(== e false)]))
+
+(defn bstepo [e o]
+  (conde
+    [(fresh [e1 e2 o1]
+       (appo e1 e2 e)
+       (appo o1 e2 o)
+       (bstepo e1 o1))]
+    [(fresh [e1 e2 o2]
+       (appo e1 e2 e)
+       (appo e1 o2 o)
+       (bvalo e1)
+       (bstepo e2 o2))]
+    [(fresh [e1 e2 e0]
+       (nom/fresh [x]
+         (appo e1 e2 e)
+         (bvalo e1)
+         (bvalo e2)
+         (lamo x e0 e1)
+         (nom/hash x e2)
+         (gsubsto e0 e2 x o)))]
+    [(fresh [c a b co]
+       (ifo c a b e)
+       (ifo co a b o)
+       (bstepo c co))]
+    [(fresh [c a b]
+       (ifo c a b e)
+       (bvalo c)
+       (conde
+         [(== true c) (== o a)]
+         [(== false c) (== o b)]))]))
+
+(defn btio [g e t]
+  (conde
+    ;; Var
+    [(fresh [x]
+       (nomo x) (== e x)
+       (env-ino x t g))]
+    ;; Abs
+    [(fresh [e0 tx t0 g0]
+       (nom/fresh [x]
+         (lamo x e0 e)
+         (arro tx t0 t)
+         (env-pluso x tx g g0)
+         (btio g0 e0 t0)))]
+    ;; App
+    [(fresh [e1 e2 t1 t2]
+       (appo e1 e2 e)
+       (arro t2 t t1)
+       (btio g e1 t1)
+       (btio g e2 t2))]
+    ;; True
+    [(== e true) (== t 'bool)]
+    ;; False
+    [(== e false) (== t 'bool)]
+    ;; If
+    [(fresh [c a b]
+       (ifo c a b e)
+       (btio g c 'bool)
+       (btio g a t)
+       (btio g b t))]))
+
+(defn btio-bad1 [g e t]
+  (conde
+    ;; Var
+    [(fresh [x]
+       (nomo x) (== e x)
+       (env-ino x t g))]
+    ;; Abs
+    [(fresh [e0 tx t0 g0]
+       (nom/fresh [x]
+         (lamo x e0 e)
+         (arro tx t0 t)
+         (env-pluso x tx g g0)
+         (btio-bad1 g0 e0 t0)))]
+    ;; App
+    [(fresh [e1 e2 t1 t2]
+       (appo e1 e2 e)
+       (arro t2 t t1)
+       (btio-bad1 g e1 t1)
+       (btio-bad1 g e2 t2))]
+    ;; True
+    [(== e true) (== t 'bool)]
+    ;; False
+    [(== e false) (== t 'bool)]
+    ;; If
+    [(fresh [c a b]
+       (ifo c a b e)
+       (btio-bad1 g c 'bool)
+       (btio-bad1 g a t)
+       ;; missing else branch: (btio g b t)
+     )]))
+
+(defn btio-bad2 [g e t]
+  (conde
+    ;; Var
+    [(fresh [x]
+       (nomo x) (== e x)
+       (env-ino x t g))]
+    ;; Abs
+    [(fresh [e0 tx t0 g0]
+       (nom/fresh [x]
+         (lamo x e0 e)
+         (arro tx t0 t)
+         (env-pluso x tx g g0)
+         (btio-bad2 g0 e0 t0)))]
+    ;; App
+    [(fresh [e1 e2 t1 t2]
+       (appo e1 e2 e)
+       (arro t2 t t1)
+       (btio-bad2 g e1 t1)
+       (btio-bad2 g e2 t2))]
+    ;; True
+    [(== e true) (== t 'bool)]
+    ;; False
+    [(== e false) (== t 'bool)]
+    ;; If
+    [(fresh [c a b tyc]
+       (ifo c a b e)
+       (btio-bad2 g c tyc) ;; tyc should be 'bool
+       (btio-bad2 g a t)
+       (btio-bad2 g b t))]))
+
+(about "counterexample-generation"
+  (eg (run 1 [q] ((check-preservation tio stepo) q max-tries))
+    ==> `((~'reached ~max-tries)))
+  (eg (run 1 [q] ((check-preservation btio bstepo) q max-tries))
+    ==> `((~'reached ~max-tries)))
+  (eg (run 1 [q] ((check-progress btio bstepo bvalo) q max-tries))
+    ==> `((~'reached ~max-tries)))
+  (eg (to-clj (run 1 [q] ((check-preservation btio-bad1 bstepo) q max-tries)))
+    ==> '([counterexample (if false true (fn [a_0] true)) (fn [a_0] true) bool [_1 -> bool]]))
+  (eg (to-clj (run 1 [q] ((check-progress btio-bad2 bstepo bvalo) q max-tries)))
+    ==> '([counterexample (if (fn [a_0] true) true true) bool])))
+
+;;; Understanding and Debugging via Meta-Interpreters
 
 (defn tio-clause [c a b]
   (fresh [g e t]
