@@ -1,3 +1,11 @@
+`core.logic.nominal` extends `core.logic` to simplify writing type
+inferencers, interpreters and other such programs that must reason about
+scope and binding. Compared to other approaches for reasoning about
+scope and binding, the nominal technique really captures the conventions
+used on paper. Furthermore, nominal logic fully integrates with logic
+programming, which means that that it just works in the presence of
+unbound logic variables.
+
 # Why?
 
 I implemented `core.logic.nominal` to integrate (1) relational, (2)
