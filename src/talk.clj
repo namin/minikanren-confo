@@ -22,13 +22,15 @@
   (eg
     (run* [q]
       (nom/fresh [a b]
-        (== (lam a (lam b a)) (lam b (lam a b)))))
+        (== (lam a (lam b a))
+            (lam b (lam a b)))))
     ==> '(_0))
 
   (eg
     (run* [q]
       (nom/fresh [a b]
-        (== (lam a (lam b a)) (lam a (lam b b)))))
+        (== (lam a (lam b a))
+            (lam a (lam b b)))))
     ==> '())
 
   (eg
@@ -41,7 +43,13 @@
     (run* [q]
       (nom/fresh [a b c]
         (== (lam a c) (lam b c))))
-    ==> '(_0)))
+    ==> '(_0))
+
+  (eg
+    (run* [q]
+      (nom/fresh [a b]
+        (== (lam a b) (lam b a))))
+    ==> '()))
 
 ;;; formally,
 ;;; `λa.e ≡α λb.(swap b a)e` where
