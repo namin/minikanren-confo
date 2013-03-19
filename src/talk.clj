@@ -438,6 +438,22 @@
 
 ;;; Demo Interlude: Run you Research!
 
+;;; Explaining and Debugging Type Derivations
+
+(about "type-deriv-motiv"
+  (eg
+    (run* [q]
+      (nom/fresh [x]
+        (tio empty-env (lam x x) q)))
+    ==> '([_0 -> _0]))
+
+  (eg
+    (run* [q]
+      (nom/fresh [x]
+        (tio empty-env (lam x (app x x)) q)))
+    ==> '())
+)
+
 ;;; Finding Counterexamples to Meta-Theoretic Properties
 
 (defn gsubsto [e new a out] ;; out == [new/a]e
