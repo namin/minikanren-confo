@@ -1,6 +1,7 @@
 (ns talk
   (:use [live] :reload)
   (:use [supp] :reload)
+  (:use [meta] :reload)
   (:refer-clojure :exclude [==])
   (:use [clojure.core.logic :exclude [is] :as l]
         [clojure.core.logic.nominal :exclude [fresh hash] :as nom])
@@ -16,7 +17,8 @@
   (eg
     (run* [q]
       (nom/fresh [a b]
-        (== (lam a a) (lam b b))))
+        (== (lam a a)
+            (lam b b))))
     ==> '(_0))
 
   (eg
@@ -36,19 +38,22 @@
   (eg
     (run* [q]
       (nom/fresh [a b]
-        (== (lam a b) (lam b b))))
+        (== (lam a b)
+            (lam b b))))
     ==> '())
 
   (eg
     (run* [q]
       (nom/fresh [a b c]
-        (== (lam a c) (lam b c))))
+        (== (lam a c)
+            (lam b c))))
     ==> '(_0))
 
   (eg
     (run* [q]
       (nom/fresh [a b]
-        (== (lam a b) (lam b a))))
+        (== (lam a b)
+            (lam b a))))
     ==> '()))
 
 ;;; formally,
@@ -431,6 +436,104 @@
        ([[env _0 (_1 _2 [_3 _4] . _5)] || _3 ==> _4] :- (nom _3)))))
 
 ;;; Demo Interlude: Run you Research!
+
+;;; Meta-Interpreters: Clauses
+
+(defn tio-clause [c a b]
+  (fresh [g e t]
+    (== ['tio g e t] a)
+    (conde
+      [(== c 'T-Var)
+       (fresh [x]
+         (nomo x) (== e x)
+         (env-ino x t g)
+         (== b ()))]
+      [(== c 'T-Abs)
+       (fresh [e0 tx t0 g0]
+         (nom/fresh [x]
+           (lamo x e0 e)
+           (arro tx t0 t)
+           (env-pluso x tx g g0)
+           (== b [['tio g0 e0 t0]])))]
+      [(== c 'T-App)
+       (fresh [e1 e2 t1 t2]
+         (appo e1 e2 e)
+         (arro t2 t t1)
+         (== b [['tio g e1 t1]
+                ['tio g e2 t2]]))])))
+
+(def tio-deriv (solve-proof-for tio-clause))
+
+(about "type-derivations"
+  (eg
+    (to-clj
+      (run* [q]
+        (fresh [ty tree]
+          (nom/fresh [x]
+            (tio-deriv ['tio empty-env (lam x x) ty] tree)
+            (== q [ty tree])))))
+    ==>
+    '([[_0 -> _0]
+        ([[tio [env () ()] (fn [a_1] a_1) [_0 -> _0]] <-- T-Abs
+           ([[tio [env (a_2) ([a_2 _0])] a_2 _0] <-- T-Var ()])])]))
+  (eg
+    (run* [q]
+      (fresh [ty tree]
+        (nom/fresh [x]
+          (tio-deriv ['tio empty-env (lam x `(~x ~x)) ty] tree)
+          (== q [ty tree]))))
+    ==> '()))
+
+(defn tio-debug-clause [c a b]
+  (conde
+    [(fresh [x y]
+       (== a ['== x y])
+       (== x y)
+       (== b ()))]
+    [(fresh [x t g]
+       (== a ['env-ino x t g])
+       (env-ino x t g)
+       (== b ()))]
+    [(fresh [g e t]
+       (== ['tio g e t] a)
+       (conde
+         [(== c 'T-Var)
+          (fresh [x]
+            (nomo x) (== e x)
+            (== b [['env-ino x t g]]))]
+         [(== c 'T-Abs)
+          (fresh [e0 tx t0 g0]
+            (nom/fresh [x]
+              (lamo x e0 e)
+              (env-pluso x tx g g0)
+              (== b [['tio g0 e0 t0]
+                     ['== t (arr tx t0)]])))]
+         [(== c 'T-App)
+           (fresh [e1 e2 t1 t2 t11 t12]
+             (appo e1 e2 e)
+             (== b [['tio g e1 t1]
+                    ['tio g e2 t2]
+                    ['== t1 (arr t11 t12)]
+                    ['== t2 t11]
+                    ['== t t12]]))]))]))
+
+(def tio-debug (debug-proof-for tio-clause))
+
+(about "type-debugger"
+  (eg
+    (to-clj
+      (run* [q]
+        (fresh [ty tree ok]
+          (nom/fresh [x]
+            (tio-debug ['tio empty-env (lam x `(~x ~x)) ty] tree ok)
+            (== q [ty tree ok])))))
+    ==>
+    '([[[_0 -> _1] -> _1]
+        ([[tio [env () ()] (fn [a_2] (a_2 a_2)) [[_0 -> _1] -> _1]] <-- T-Abs
+           ([[tio [env (a_3) ([a_3 [_0 -> _1]])] (a_3 a_3) _1] <-- T-App
+              ([[tio [env (a_3) ([a_3 [_0 -> _1]])] a_3 [_0 -> _1]] <-- T-Var ()]
+               [[tio [env (a_3) ([a_3 [_0 -> _1]])] a_3 _0] error])])])
+        false])))
 
 ;;; Under the hood: swapping
 
