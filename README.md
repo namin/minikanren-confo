@@ -99,6 +99,9 @@ that a nom does not occur _free_ in a term.
 
 ### Example: type debugger
 
+[PDF](http://lampwww.epfl.ch/~amin/nominal/type_deriv_exs.pdf) of auto-generated derivation and debug trees
+
+
 ### Example: generator of counterexamples to meta-theoretic properties
 
 ## Under the hood: swapping!
