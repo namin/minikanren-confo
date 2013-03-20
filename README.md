@@ -1,3 +1,11 @@
+# `core.logic.nominal` talk
+
+## Run the examples from the [talk](src/talk.clj)
+
+`lein test talk`
+
+## `core.logic.nominal`
+
 `core.logic.nominal` extends `core.logic` to simplify writing type
 inferencers, interpreters and other such programs that must reason about
 scope and binding. Compared to other approaches for reasoning about
@@ -6,7 +14,7 @@ used on paper. Furthermore, nominal logic fully integrates with logic
 programming, which means that that it just works in the presence of
 unbound logic variables.
 
-# Why?
+## Why?
 
 I implemented `core.logic.nominal` to integrate (1) relational, (2)
 constraint-based and (3) nominal techniques in one tool. Each of these
@@ -21,7 +29,7 @@ abstract syntax simplifies reasoning about names and bindings so that you
 can use the same conventions in your implementation as on paper.
 
 
-# Nominal Logic Programming
+## Nominal Logic Programming
 
 Nominal logic programming brings nominal abstract syntax to logic
 programming. Nominal abstract syntax is a technique for reasoning about
