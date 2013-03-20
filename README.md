@@ -17,7 +17,7 @@ also a generator of well-typed terms, and possibly a type
 inferencer. (2) If you express the rules of your type system as
 constraints, and are able to monitor those constraints, then you can
 possibly turn your type checker into a type debugger. (3) Nominal
-abstract syntax simplfies reasoning about names and bindings so that you
+abstract syntax simplifies reasoning about names and bindings so that you
 can use the same conventions in your implementation as on paper.
 
 
