@@ -293,7 +293,6 @@
          (valo e1)
          (valo e2)
          (lamo x e0 e1)
-         (nom/hash x e2)
          (substo e0 e2 x o)))]))
 
 (defn stepo* [e o]
