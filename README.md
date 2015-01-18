@@ -52,7 +52,7 @@ Consider the lambda calculus, `e := x | (e e) | λx.e`.
 A λ-term is a _binder_ because it _binds_ a name `x` in the term
 `e`. Intuitively, the choice of the _bound_ names are unimportant, as
 long as the same binding structure is represented, e.g.  `λa.a ≡α λb.b`
-and `λa.λb.a ≡α λb.λa.b` but `λa.λb.a ≢α λb.λa.b`.
+and `λa.λb.a ≡α λb.λa.b` but `λa.λb.a ≢α λb.λa.a`.
 
 This intuitive notion of equality for binders is known as
 α-equivalence. Formally, `λa.e ≡α λb.[b/a]e` where `b` does not occur
