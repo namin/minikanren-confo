@@ -1,4 +1,4 @@
-# `core.logic.nominal` talk
+# [`core.logic.nominal`](https://github.com/clojure/core.logic/blob/master/src/main/clojure/clojure/core/logic/nominal.clj) talk
 
 ## Run the examples from the [talk](src/talk.clj)
 
@@ -126,3 +126,8 @@ conditions:
 * `x` and `x'` both become bound -- the swapping can resume
 * `x` and `x'` become equal -- we enforce `a#x'` and `b#x'` and drop the
   swap constraint
+
+## Some References
+
+- alphaKanren ([PDF](http://www.cs.indiana.edu/~webyrd/alphamk/alphamk.pdf))
+- Nominal Unification ([PDF)[http://www.cl.cam.ac.uk/~amp12/papers/nomu/nomu-jv.pdf])
