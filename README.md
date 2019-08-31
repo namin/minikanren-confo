@@ -129,5 +129,5 @@ conditions:
 
 ## Some References
 
-- alphaKanren ([PDF](http://www.cs.indiana.edu/~webyrd/alphamk/alphamk.pdf))
-- Nominal Unification ([PDF](http://www.cl.cam.ac.uk/~amp12/papers/nomu/nomu-jv.pdf]))
+- _alphaKanren_ ([PDF](http://www.cs.indiana.edu/~webyrd/alphamk/alphamk.pdf))
+- _Nominal Unification_ ([PDF](http://www.cl.cam.ac.uk/~amp12/papers/nomu/nomu-jv.pdf]))
