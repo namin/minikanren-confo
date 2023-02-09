@@ -130,4 +130,4 @@ conditions:
 ## Some References
 
 - _alphaKanren_ ([PDF](http://webyrd.net/alphamk/alphamk.pdf))
-- _Nominal Unification_ ([PDF](https://www.cl.cam.ac.uk/~amp12/papers/nomu/nomu.pdf]))
+- _Nominal Unification_ ([PDF](https://www.cl.cam.ac.uk/~amp12/papers/nomu/nomu.pdf))
